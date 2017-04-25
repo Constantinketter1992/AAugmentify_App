@@ -11,10 +11,10 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 	private CloudRecoBehaviour mCloudRecoBehaviour;
 	private ObjectTracker mImageTracker;
 	private bool mIsScanning = false;
-	private GameObject target_model; 
-	private GameObject character_model; 
-	private GameObject bubbleText_model; 
-	private GameObject button_model; 
+	private GameObject target_model;
+	private GameObject character_model;
+	private GameObject bubbleText_model;
+	private GameObject button_model;
 	private GameObject newImageTarget;
 	ImageTargetAbstractBehaviour imageTargetBehaviour;
 	private TextMesh bubble_text;
@@ -33,9 +33,9 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 	public GUIStyle style_reviews;
 	public GUIStyle style_button_main;
 	public GUIStyle style_AR_title;
-	public GUIStyle style_button_next; 
+	public GUIStyle style_button_next;
 	public GUIStyle style_button_previous;
-	public GUIStyle style_description_box; 
+	public GUIStyle style_description_box;
 	public GUIStyle style_landmark_description;
 	public GUIStyle style_item_title;
 	public GUIStyle style_button_AR_main;
@@ -53,10 +53,10 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 	public GUIStyle style_scanningLine;
 	public GUIStyle style_AR_subtitle;
 	public GUIStyle style_reviews_moreButton;
-	private string priceyness_sign; 
-	private string priceyness_empty; 
+	private string priceyness_sign;
+	private string priceyness_empty;
 
-	//UI variables 
+	//UI variables
 	private bool showMainPage = true;
 	private bool showPopularDishes = false;
 	private bool showHours = false;
@@ -74,9 +74,9 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 	public int i = 0;
 	public MyClass Targetdata;
 	public Target_information target_info;
-	//public ScanLine scanLine; 
+	//public ScanLine scanLine;
 	//public SimpleCharacterControl animation;
-	//load images:variable 
+	//load images:variable
 	private Object[] textures;
 	private List<string> reviews_text;
 	private List<string> reviews_url;
@@ -92,18 +92,18 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 	private bool mMovingDown = true;
 	private float u = 0;
 	private GameObject go;
-	//class that will hold the image target metadata 
+	//class that will hold the image target metadata
 	[System.Serializable]
 	public class MyClass
   	{
-		//what all image-targets' metadata share: a type (monument/restaurant/bar/cafe) 
+		//what all image-targets' metadata share: a type (monument/restaurant/bar/cafe)
 		//and description(the target's main description/title: e.g. "Starbucks, a famous coffee shop")
 	    public string Type;
 		public string Name;
 		public string id = "";
 	    public string Description;
 
-		//items: 
+		//items:
 		public string Item_1 = "";
 		public string Item_1_description = "";
 		public string Item_1_price = "";
@@ -137,7 +137,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 		{
 			mCloudRecoBehaviour.RegisterEventHandler(this);
 		}
-			
+
 		go = GameObject.CreatePrimitive(PrimitiveType.Plane);
 		textures = Resources.LoadAll("textures");
 
@@ -178,7 +178,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 		//turn JSON into object
 		Targetdata = JsonUtility.FromJson<MyClass>(mTargetMetadata);
 
-		//set text in bubble dialogue 
+		//set text in bubble dialogue
 		bubble_text = GameObject.Find("BubbleMessage").GetComponent<TextMesh> ();
 		bubble_text.text = "Hurray! you found\na "+Targetdata.Type+"!";
 //		bubble_text.fontSize = 10;
@@ -217,7 +217,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 			break;
 
 		case "Restaurant" :
-			
+
 			target_model = imageTargetBehaviour.gameObject.transform.Find("Restaurant").gameObject;
 			Destroy( imageTargetBehaviour.gameObject.transform.Find("Landmark").gameObject );
 			Destroy( imageTargetBehaviour.gameObject.transform.Find("Clothing Store").gameObject );
@@ -225,7 +225,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 			Destroy( imageTargetBehaviour.gameObject.transform.Find("Bar").gameObject );
 
 			break;
-		
+
 		case "Cafe" :
 
 			target_model = imageTargetBehaviour.gameObject.transform.Find("Cafe").gameObject;
@@ -248,24 +248,24 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 
 		}
 
-		//character model 
+		//character model
 		character_model = imageTargetBehaviour.gameObject.transform.Find("Character").gameObject;
 		//bubble text model:
 		bubbleText_model = imageTargetBehaviour.gameObject.transform.Find("BubbleText").gameObject;
-		//button model 
+		//button model
 		button_model = imageTargetBehaviour.gameObject.transform.Find("Button").gameObject;
 
 		mCloudRecoBehaviour.CloudRecoEnabled = false;
 		//ShowScanLine(false);
 		mIsScanning = false;
 
-		//if target is restaurant/cafe/bar do a yelp public API search for more information 
+		//if target is restaurant/cafe/bar do a yelp public API search for more information
 		if (Targetdata.Type != "Landmark") {
 			StartCoroutine (GetTargetReviews ());
 			StartCoroutine (GetTargetInformation ());
 		}
 	}
-		
+
 	//get target reviews from Yelp's public API
 	IEnumerator GetTargetReviews()
 	{
@@ -315,12 +315,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 					target_hours.Add(node["hours"][0]["open"][i]["start"].Value.Insert(2,":"));
 					target_hours.Add(node["hours"][0]["open"][i]["end"].Value.Insert(2,":"));
 				}
-				Debug.Log(target_info.price);
-				Debug.Log(target_hours[0]);
-				Debug.Log (target_info.is_closed);
-				if (Targetdata.Name == "Conor O'Neill's") {
-					target_info.is_closed = true;
-				}
+
 			}
 		}
 	}
@@ -331,14 +326,14 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 		if (background_color) {
 			GUI.Box (new Rect (0, 0, Screen.width, Screen.height), "", style_background_main);
 		}
-		//background color: home page 
+		//background color: home page
 		if (background_home) {
 			GUI.Box (new Rect (0, 0, Screen.width, Screen.height/2), "", style_background_main);
 			GUI.Box (new Rect (0, Screen.height/2, 2*Screen.width/5, Screen.height/2), "", style_background_main);
 			GUI.Box (new Rect (3*Screen.width/5, Screen.height/2, 2*Screen.width/5, Screen.height/2), "", style_background_main);
 			GUI.Box (new Rect (2*Screen.width/5, 4*Screen.height/5-20, Screen.width/5, Screen.height/5+20), "", style_background_main);
 		}
-			
+
 		//title: on all pages
 		GUI.Label(new Rect(Screen.width/2-160,20,320,188), "", style_title);
 
@@ -348,7 +343,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 
 		//home page
 		if (showMainPage) {
-			
+
 			//background
 			background_color = false;
 			background_home = true;
@@ -367,12 +362,12 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 				character_main.SetActive (false);
 				background_home = false;
 			}
-				
+
 		}
 
-		//scanning page 
+		//scanning page
 		if (showScanningPage) {
-			
+
 			//background color off
 			background_color = false;
 
@@ -408,9 +403,9 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 		}
 
 
-		//image target description 
+		//image target description
 		if (showTargetDescription) {
-			
+
 			//background color
 			background_color = true;
 
@@ -418,7 +413,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 			GUI.Label (new Rect (Screen.width / 2, 300, 0, 0), Targetdata.Name, style_AR_title);
 			GUI.Label (new Rect (Screen.width / 2, 360, 0, 0), Targetdata.Type, style_AR_subtitle);
 
-			//button: return to main page 
+			//button: return to main page
 			if (GUI.Button (new Rect (50, 50, 90, 90), "", style_button_AR_return)) {
 				showTargetDescription = false;
 				showMainPage = true;
@@ -426,7 +421,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 
 			//other UI elements: will depend on object type
 
-			//for restaurants/cafes/bars/shops: 
+			//for restaurants/cafes/bars/shops:
 			//there will be a "show popular items" button -> each button will be written differently e.g. "popular dishes"/"popular drinks"
 			if (Targetdata.Type == "Cafe" || Targetdata.Type == "Bar") {
 				popularItems = "Popular Items";
@@ -436,23 +431,23 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 				popularItems = "Top Sellers";
 			}
 
-			//UI for restaurant/cafe/bar/shops are the same 
+			//UI for restaurant/cafe/bar/shops are the same
 			if (Targetdata.Type != "Landmark") {
 
 				//description
 				GUI.TextArea (new Rect (Screen.width / 2-400, 540, 800 , 400), Targetdata.Description, style_description_box);
 
-				//priceyness level from 0-4. The 0-4 level will be written in the number of dollar signs: "$" 
+				//priceyness level from 0-4. The 0-4 level will be written in the number of dollar signs: "$"
 				//example: one red "$" and three white "$" will mean a priceyness level of 1 out of 4
 				//Yelp's API gives us the priceyness level in "$" signs. So for a level of 2/4 it will give us "$$"
 				//therefore we have to add the rest of the "white"(empty) $ signs
 				//we do this by finding the difference between the total(4) and the number of $ signs returned from yelp
 				priceyness_sign = target_info.price;
 				int priceyness_difference =  4 - priceyness_sign.Length;
-				priceyness_empty = ""; 
+				priceyness_empty = "";
 				for (var i = 0; i < priceyness_difference; i++) {
 					priceyness_empty = priceyness_empty + "$";
-				} 
+				}
 
 				//show priceyness level
 				GUI.Label (new Rect (Screen.width/2, 1000, 0, 0), "<color=green>"+ priceyness_sign + "</color>" + "<color=grey>" + priceyness_empty + "</color>", style_target_priceyness);
@@ -479,10 +474,10 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 				string rating_star_empty = "";
 				for (var i = 0; i < rating_star_count; i++) {
 					rating_star = rating_star + "Z ";
-				} 
+				}
 				for (var i = 0; i < rating_difference; i++) {
 					rating_star_empty = rating_star_empty + "Z";
-				} 
+				}
 				GUI.Label (new Rect (Screen.width/2, 430, 0, 0), "<color=#e78200>"+ rating_star + "</color>" + "<color=grey>" + rating_star_empty + "</color>", style_star_rating);
 
 
@@ -502,18 +497,18 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 				if (GUI.Button (new Rect (1080-93-400, 1300, 400, 190), "Reviews", style_button)) {
 					showTargetReviews = true;
 					showTargetDescription = false;
-				}	
+				}
 
-				//button: yelp icon link 
+				//button: yelp icon link
 				if (GUI.Button (new Rect (1080-93-400, 1550, 400, 190), "Yelp", style_button)) {
 					Application.OpenURL(target_info.url);
 				}
 			}
 
-			//UI for Landmark 
+			//UI for Landmark
 			else{
-				
-	
+
+
 				//get item descriptions
 				description_identifier = new List<string>();
 				description_identifier.Add(Targetdata.Item_1_description);
@@ -544,16 +539,16 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 					}
 				}
 
-				//description of Landmark:  
+				//description of Landmark:
 				GUI.TextArea (new Rect (Screen.width/2 - 400, 1000, 800, 720), description_identifier[i], style_landmark_description);
 			}
-				
+
 		}
 
 
-		//show popular items 
+		//show popular items
 		if (showTargetPopularItems) {
-			
+
 			//get item images
 			image_identifier = new List<int>();
 			image_identifier.Add(FindImageItem(Targetdata.Item_1));
@@ -583,7 +578,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 			GUI.TextArea (new Rect (Screen.width/2 - 400, 1250, 800, 350), description_identifier [i], style_description_box);
 			//show item price
 			GUI.Label (new Rect (Screen.width/2, 1670, 0, 0), price_identifier [i] , style_item_price);
-			//show image 
+			//show image
 			Texture2D image = (Texture2D)textures[image_identifier[i]];
 			go.GetComponent<Renderer>().material.mainTexture = image;
 			GUI.DrawTexture (new Rect (Screen.width / 2 - 400, 500, 800, 650), image);
@@ -606,7 +601,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 				}
 			}
 
-			//button: return 
+			//button: return
 			if (GUI.Button (new Rect (50, 50, 90, 90), "", style_button_AR_return)) {
 				showTargetPopularItems = false;
 				showTargetDescription = true;
@@ -615,13 +610,13 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 		}
 
 
-		//show business hours: 
+		//show business hours:
 		if (showTargetBusinessHours) {
-			// title 
+			// title
 			GUI.Label (new Rect (Screen.width/2, 350, 0, 0), "Business Hours", style_AR_title);
 
 			//show business hours
-			string hours_text = 
+			string hours_text =
 				"Monday: " + target_hours[0] + " - "  + target_hours[1]  +  "\n\n" +
 				"Tuesday: " + target_hours[2] + " - "  + target_hours[3]  +  "\n\n" +
 				"Wednesday: " + target_hours[4] + " - "  + target_hours[5]  +  "\n\n" +
@@ -632,7 +627,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 			GUI.TextArea (new Rect (Screen.width/2 - 340, 520, 680, 1000), hours_text, style_businessHours);
 			//JSONdata.hours
 
-			//button: return to main page 
+			//button: return to main page
 			if (GUI.Button (new Rect (50, 50, 90, 90), "", style_button_AR_return)) {
 				showTargetBusinessHours = false;
 				showTargetDescription = true;
@@ -640,14 +635,14 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 
 		}
 
-		//show 3 reviews from yelp's public API: 
+		//show 3 reviews from yelp's public API:
 		if (showTargetReviews) {
 
-			// title 
+			// title
 			GUI.Label (new Rect (Screen.width/2, 300, 0, 0), "Reviews", style_AR_title);
 
 			//show reviews
-			//show text of each review and rating in star signs 
+			//show text of each review and rating in star signs
 			List<string> ratings = new List<string>();
 			List<string> ratings_empty = new List<string>();
 			for (var i = 0; i < 3; i++) {
@@ -669,7 +664,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 			GUI.TextArea (new Rect (200, 950, 680, 300), reviews_text[1], style_reviews);
 			GUI.TextArea (new Rect (200, 1430, 680, 300), reviews_text[2], style_reviews);
 
-			//buttons -> read more: directs you to Yelp 
+			//buttons -> read more: directs you to Yelp
 			if (GUI.Button (new Rect (900, 570, 100, 100), "", style_reviews_moreButton)) {
 				Application.OpenURL(reviews_url[0]);
 			}
@@ -681,14 +676,14 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 			}
 
 
-			//button: return 
+			//button: return
 			if (GUI.Button (new Rect (50, 50, 90, 90), "", style_button_AR_return)) {
 				showTargetReviews = false;
 				showTargetDescription = true;
 				Debug.Log ("hi");
 			}
 		}
-			
+
 
 
 	}
@@ -698,7 +693,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 
 
 
-			
+
 
 
 
@@ -724,7 +719,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler {
 //		Vector2 pointB = new Vector2 (Screen.width/3, Screen.height/3);
 //		Drawing.DrawLine(pointA, pointB, Color.red, 1);
 
-	
+
 	//}
 
 	void Update(){
